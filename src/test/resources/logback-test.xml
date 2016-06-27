@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- zookeeper won't start if there's no logback configuration ... -->
+
+<configuration>
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%date] %level [%X{akkaSource}] %message%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Change to DEBUG for debugging test failures -->
+    <logger name="mesosphere.marathon" level="INFO"/>
+    <logger name="akka" level="INFO"/>
+
+    <root level="INFO">
+        <appender-ref ref="stdout"/>
+    </root>
+</configuration>

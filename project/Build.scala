@@ -23,7 +23,9 @@ object Build extends sbt.Build {
         Dependency.macWireMacros,
         Dependency.macWireUtil,
         Dependency.macWireProxy,
-        Dependency.metrics
+        Dependency.metrics,
+        Dependency.Test.scalatest,
+        Dependency.Test.scalatestPlay
       )
     )
   )
