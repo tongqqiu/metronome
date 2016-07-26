@@ -21,3 +21,5 @@ When you create the Metronome job, you can specify:
 * The schedule for your job, in chron format. You can also set the time zone and starting deadline.
 
 * An arbitrary number of labels to attach to your job.
+
+* Permissions for your job.
