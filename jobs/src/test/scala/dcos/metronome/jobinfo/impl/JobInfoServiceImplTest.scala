@@ -7,7 +7,7 @@ import dcos.metronome.jobinfo.JobSpecSelector
 import dcos.metronome.jobrun.JobRunServiceFixture
 import dcos.metronome.jobspec.impl.JobSpecServiceFixture
 import dcos.metronome.model._
-import dcos.metronome.utils.time.FixedClock
+import SettableClock
 import org.joda.time.DateTime
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.{ Matchers, GivenWhenThen, FunSuite }
@@ -122,7 +122,7 @@ class JobInfoServiceImplTest extends FunSuite with GivenWhenThen with ScalaFutur
   }
 
   class Fixture {
-    val clock = new FixedClock(DateTime.now)
+    val clock = new SettableClock(DateTime.now)
     val CronSpec(cron) = "* * * * *"
     val schedule1 = ScheduleSpec("id1", cron)
     val schedule2 = ScheduleSpec("id2", cron)

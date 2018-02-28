@@ -12,7 +12,7 @@ import dcos.metronome.jobrun.impl.JobRunServiceActor._
 import dcos.metronome.model._
 import dcos.metronome.repository.impl.InMemoryRepository
 import dcos.metronome.utils.test.Mockito
-import dcos.metronome.utils.time.FixedClock
+import SettableClock
 import mesosphere.marathon.core.task.Task
 import org.joda.time.DateTime
 import org.scalatest._
@@ -211,7 +211,7 @@ class JobRunServiceActorTest extends TestKit(ActorSystem("test")) with FunSuiteL
     val jobSpec = JobSpec(id)
     val forbidSchedule = ScheduleSpec("schedule", CronSpec("* * * * *"), ScheduleSpec.DefaultTimeZone, ScheduleSpec.DefaultStartingDeadline, ConcurrencyPolicy.Forbid)
 
-    val clock = new FixedClock(DateTime.parse("2016-06-01T08:50:12.000Z"))
+    val clock = new SettableClock(DateTime.parse("2016-06-01T08:50:12.000Z"))
 
     def run() = {
       val jobRun = new JobRun(JobRunId(jobSpec), jobSpec, JobRunStatus.Active, clock.now(), None, None, Map.empty[Task.Id, JobRunTask])

@@ -1,12 +1,13 @@
 package dcos.metronome
 package jobspec.impl
 
+import java.time.{Clock, Instant}
+
 import akka.actor._
-import dcos.metronome.behavior.{ ActorBehavior, Behavior }
+import dcos.metronome.behavior.{ActorBehavior, Behavior}
 import dcos.metronome.jobrun.JobRunService
-import dcos.metronome.model.{ ConcurrencyPolicy, JobSpec, ScheduleSpec }
-import dcos.metronome.utils.time.Clock
-import org.joda.time.{ DateTime, Seconds }
+import dcos.metronome.model.{ConcurrencyPolicy, JobSpec, ScheduleSpec}
+import org.joda.time.{DateTime, Seconds}
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
@@ -26,7 +27,7 @@ class JobSpecSchedulerActor(
 
   private[impl] var spec = initSpec
   private[impl] var nextSchedule: Option[Cancellable] = None
-  private[impl] var scheduledAt: Option[DateTime] = None
+  private[impl] var scheduledAt: Option[Instant] = None
 
   override def preStart(): Unit = {
     scheduleNextRun()
@@ -59,7 +60,7 @@ class JobSpecSchedulerActor(
     cancelSchedule()
     // TODO: only reschedule for one specific schedule!
     spec.schedules.foreach { schedule =>
-      val now = clock.now()
+      val now = clock.instant()
       val from = lastScheduledAt.getOrElse(now)
       val nextTime = schedule.nextExecution(from)
       scheduledAt = Some(nextTime)

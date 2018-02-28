@@ -7,7 +7,7 @@ import dcos.metronome.behavior.BehaviorFixture
 import dcos.metronome.jobrun.JobRunService
 import dcos.metronome.model._
 import dcos.metronome.utils.test.Mockito
-import dcos.metronome.utils.time.FixedClock
+import SettableClock
 import org.joda.time.{ DateTime, DateTimeZone }
 import org.scalatest._
 import org.scalatest.concurrent.{ Eventually, ScalaFutures }
@@ -109,7 +109,7 @@ class JobSpecSchedulerActorTest extends TestKit(ActorSystem("test")) with FunSui
     val jobSpec = JobSpec(id).copy(schedules = Seq(
       ScheduleSpec("every_minute", cron = everyMinute),
       ScheduleSpec("minutely", cron = everyMinute, concurrencyPolicy = ConcurrencyPolicy.Forbid)))
-    val clock = new FixedClock(DateTime.parse("2016-06-01T08:50:12.000Z"))
+    val clock = new SettableClock(DateTime.parse("2016-06-01T08:50:12.000Z"))
     val behavior = BehaviorFixture.empty
     val jobRunService = mock[JobRunService]
     def scheduleActor = TestActorRef[JobSpecSchedulerActor](JobSpecSchedulerActor.props(jobSpec, clock, jobRunService, behavior))
@@ -120,7 +120,7 @@ class JobSpecSchedulerActorTest extends TestKit(ActorSystem("test")) with FunSui
     val id = JobId("/daylight")
     val jobSpec = JobSpec(id).copy(schedules = Seq(ScheduleSpec("every_minute", cron = everyMinute, timeZone = DateTimeZone.forID("Pacific/Fiji"))))
     // 01:59am CDT 2017-11-05 was end of daylight saving time
-    val clock = new FixedClock(DateTime.parse("2018-01-13T13:59Z"))
+    val clock = new SettableClock(DateTime.parse("2018-01-13T13:59Z"))
     val behavior = BehaviorFixture.empty
     val jobRunService = mock[JobRunService]
     def scheduleActor = TestActorRef[JobSpecSchedulerActor](JobSpecSchedulerActor.props(jobSpec, clock, jobRunService, behavior))

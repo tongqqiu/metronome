@@ -1,13 +1,14 @@
 package dcos.metronome
 package jobrun.impl
 
+import java.time.Clock
+
 import akka.actor._
 import dcos.metronome.behavior.{ ActorBehavior, Behavior }
 import dcos.metronome.eventbus.TaskStateChangedEvent
 import dcos.metronome.jobrun.StartedJobRun
 import dcos.metronome.model._
 import dcos.metronome.repository.{ LoadContentOnStartup, Repository }
-import dcos.metronome.utils.time.Clock
 
 import scala.collection.concurrent.TrieMap
 import scala.concurrent.Promise

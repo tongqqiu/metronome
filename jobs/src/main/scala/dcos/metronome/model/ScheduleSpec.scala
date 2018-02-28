@@ -1,11 +1,11 @@
 package dcos.metronome
 package model
 
-import java.time.Clock
+import java.time.{Clock, Instant}
 
 import com.wix.accord.Validator
 import com.wix.accord.dsl._
-import org.joda.time.{ DateTime, DateTimeZone }
+import org.joda.time.{DateTime, DateTimeZone}
 
 import scala.concurrent.duration._
 
@@ -18,9 +18,10 @@ case class ScheduleSpec(
   enabled:           Boolean           = ScheduleSpec.DefaultEnabled) {
   def clock: Clock = ScheduleSpec.DefaultClock
 
-  def nextExecution(after: DateTime): DateTime = {
-    val localAfter = after.toDateTime(timeZone)
+  def nextExecution(after: Instant): Instant = {
+    val localAfter = new DateTime(after.toEpochMilli, timeZone)
     val localNext = cron.nextExecution(localAfter)
+    localNext.toInstant
     localNext.toDateTime(DateTimeZone.UTC)
   }
 

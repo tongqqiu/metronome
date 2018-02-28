@@ -13,7 +13,7 @@ import dcos.metronome.model._
 import dcos.metronome.scheduler.TaskState
 import dcos.metronome.utils.glue.MarathonImplicits._
 import dcos.metronome.utils.test.Mockito
-import dcos.metronome.utils.time.FixedClock
+import SettableClock
 import mesosphere.marathon.MarathonSchedulerDriverHolder
 import mesosphere.marathon.core.launchqueue.LaunchQueue
 import mesosphere.marathon.core.launchqueue.LaunchQueue.QueuedTaskInfo
@@ -636,7 +636,7 @@ class JobRunExecutorActorTest extends TestKit(ActorSystem("test"))
     val runSpecId = JobId("/test")
     val taskId = Task.Id.forRunSpec(runSpecId.toPathId)
     val defaultJobSpec = JobSpec(runSpecId, Some("test"))
-    val clock = new FixedClock(DateTime.parse("2016-06-01T08:50:12.000Z"))
+    val clock = new SettableClock(DateTime.parse("2016-06-01T08:50:12.000Z"))
     val launchQueue: LaunchQueue = mock[LaunchQueue]
     val taskTracker: TaskTracker = mock[TaskTracker]
     val driver = mock[SchedulerDriver]

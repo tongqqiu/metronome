@@ -20,12 +20,12 @@ class CronSpec(val cron: Cron) {
 
   private[this] lazy val executionTime: ExecutionTime = ExecutionTime.forCron(cron)
 
-  def nextExecution(from: DateTime): DateTime = {
+  def nextExecution(from: java.time.ZonedDateTime): java.time.ZonedDateTime = {
     val fromDateTime: ZonedDateTime = jodaToThreetenTime(from)
     threetenToJodaTime(executionTime.nextExecution(fromDateTime).get())
   }
 
-  def lastExecution(from: DateTime): DateTime = {
+  def lastExecution(from: java.time.ZonedDateTime): java.time.ZonedDateTime = {
     val fromDateTime: ZonedDateTime = jodaToThreetenTime(from)
     threetenToJodaTime(executionTime.lastExecution(fromDateTime).get())
   }
@@ -34,8 +34,8 @@ class CronSpec(val cron: Cron) {
     new DateTime(from.toInstant().toEpochMilli(), DateTimeZone.forID(from.getZone().getId()))
   }
 
-  private def jodaToThreetenTime(from: DateTime): ZonedDateTime = {
-    ZonedDateTime.ofInstant(Instant.ofEpochMilli(from.getMillis()), ZoneId.of(from.getZone().getID))
+  private def jodaToThreetenTime(from: java.time.ZonedDateTime): ZonedDateTime = {
+    ZonedDateTime.ofInstant(Instant.ofEpochMilli(from.toInstant.toEpochMilli), ZoneId.of(from.getZone.getId))
   }
 
   override def hashCode(): Int = cron.hashCode()

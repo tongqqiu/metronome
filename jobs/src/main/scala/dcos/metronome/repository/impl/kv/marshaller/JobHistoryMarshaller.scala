@@ -1,8 +1,10 @@
 package dcos.metronome
 package repository.impl.kv.marshaller
 
+import java.time.Instant
+
 import dcos.metronome.Protos
-import dcos.metronome.model.{ JobId, JobHistory, JobRunInfo }
+import dcos.metronome.model.{ JobHistory, JobId, JobRunInfo }
 import dcos.metronome.repository.impl.kv.EntityMarshaller
 import org.joda.time.{ DateTime, DateTimeZone }
 import org.slf4j.LoggerFactory
@@ -24,8 +26,8 @@ object JobHistoryMarshaller extends EntityMarshaller[JobHistory] {
     builder.addAllSuccessfulRuns(jobHistory.successfulRuns.toProto.asJava)
     builder.addAllFailedRuns(jobHistory.failedRuns.toProto.asJava)
 
-    jobHistory.lastSuccessAt.foreach(lastSuccessAt => builder.setLastSuccessAt(lastSuccessAt.getMillis))
-    jobHistory.lastFailureAt.foreach(lastFailureAt => builder.setLastFailureAt(lastFailureAt.getMillis))
+    jobHistory.lastSuccessAt.foreach(lastSuccessAt => builder.setLastSuccessAt(lastSuccessAt.toEpochMilli))
+    jobHistory.lastFailureAt.foreach(lastFailureAt => builder.setLastFailureAt(lastFailureAt.toEpochMilli))
 
     builder.build.toByteArray
   }
@@ -34,11 +36,11 @@ object JobHistoryMarshaller extends EntityMarshaller[JobHistory] {
     safeConversion { fromProto(Protos.JobHistory.parseFrom(bytes.toArray)) }
 
   private def fromProto(proto: Protos.JobHistory) = {
-    val lastSuccessAt: Option[DateTime] =
-      if (proto.hasLastSuccessAt) Some(new DateTime(proto.getLastSuccessAt, DateTimeZone.UTC)) else None
+    val lastSuccessAt: Option[Instant] =
+      if (proto.hasLastSuccessAt) Some(Instant.ofEpochMilli(proto.getLastSuccessAt)) else None
 
-    val lastFailureAt: Option[DateTime] =
-      if (proto.hasLastFailureAt) Some(new DateTime(proto.getLastFailureAt, DateTimeZone.UTC)) else None
+    val lastFailureAt: Option[Instant] =
+      if (proto.hasLastFailureAt) Some(Instant.ofEpochMilli(proto.getLastFailureAt)) else None
 
     JobHistory(
       jobSpecId = JobId(proto.getJobSpecId),
